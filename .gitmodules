@@ -1,0 +1,3 @@
+[submodule "third-party/mandarin-tts"]
+	path = third-party/mandarin-tts
+	url = https://github.com/ranchlai/mandarin-tts

@@ -1,2 +1,5 @@
 
 env
+log
+BotService/checkpoint_1350000.pth.tar
+BotService/vctk_pretrained_model_3180.pt

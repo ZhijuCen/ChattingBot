@@ -1,5 +1,7 @@
 
 env
 log
-BotService/checkpoint_1350000.pth.tar
-BotService/vctk_pretrained_model_3180.pt
+BotService/mtts-weights/checkpoint_1350000.pth.tar
+BotService/mtts-weights/vctk_pretrained_model_3180.pt
+
+XinzhiResources/private_key.txt

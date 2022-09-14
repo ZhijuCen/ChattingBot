@@ -59,7 +59,7 @@ vocoder:
   params:
     denoise: True
   VocGan:
-    checkpoint: ./BotService/vctk_pretrained_model_3180.pt
+    checkpoint: ./BotService/mtts-weights/vctk_pretrained_model_3180.pt
     denoise: True
     device: cuda
 

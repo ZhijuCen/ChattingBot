@@ -31,7 +31,10 @@ Linux x86_64 or WSL2 (GNU Compilers(gcc, g++) are required for installing NeMo)
 
 ## Usage
 
-## Test
+## Known Issues
+
+* pretrained stt_zh_citrinet_1024_gamma_0_25 weights may be the best STT model in NeMo,
+  however, it still mistranscribe some chars in a sentence.
 
 ## Abbreviations
 

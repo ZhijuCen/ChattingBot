@@ -15,7 +15,7 @@ if __name__ == "__main__":
     with open("BotService/fs2_model-aishell3-config.yaml", "rt") as f:
         config = yaml.safe_load(f)
     model = fs2_model.FastSpeech2(config)
-    state_dict = torch.load("BotService/checkpoint_1350000.pth.tar", map_location=device)
+    state_dict = torch.load("BotService/mtts-weights/checkpoint_1350000.pth.tar", map_location=device)
     if "model" in state_dict.keys():
         state_dict = state_dict["model"]
     model.load_state_dict(state_dict)
@@ -43,7 +43,8 @@ if __name__ == "__main__":
     seq_len = seq_len.to(device)
     max_src_len = torch.max(seq_len)
     output = model(tokens, seq_len, max_src_len=max_src_len, d_control=duration)
-    mel_pred, mel_postnet, d_pred, src_mask, mel_mask, mel_len = output
+    # mel_pred, mel_postnet, d_pred, src_mask, mel_mask, mel_len = output
+    _, mel_postnet, _, _, _, _ = output
 
     # convert to waveform using vocoder
     mel_postnet = mel_postnet[0].transpose(0, 1).detach()

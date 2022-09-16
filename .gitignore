@@ -1,6 +1,8 @@
 
 env
 log
+tmp
+**/__pycache__
 BotService/mtts-weights/checkpoint_1350000.pth.tar
 BotService/mtts-weights/vctk_pretrained_model_3180.pt
 

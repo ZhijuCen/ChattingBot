@@ -1,13 +1,14 @@
 
-from typing import final, Tuple, List
-from os import PathLike
-
-from weather_base import WeatherBase
+from .weather_base import WeatherBase
 
 import pandas as pd
 from urllib.parse import quote
 import requests
 from requests import get, Response
+
+from typing import final, Tuple, List
+from os import PathLike
+from pathlib import Path
 
 
 @final
@@ -23,11 +24,11 @@ class WeatherXinzhi(WeatherBase):
         "?key={key}&location={location}&start={start}&days={days}")
     
     err_msgs_zh = {
-        "default": "出现意外异常, 请稍后再试. 如有必要, 请联系开发者.",
-        "timeout": "连接超时, 请稍后再试.",
-        "loc_not_found": "未查到该地区的天气信息. 如果是我听错了, 请联系开发者.",
-        "xinzhi_internal_error": "天气服务出现异常, 请稍后再试.",
-        "too_frequent": "天气服务请求过于频繁, 请稍后再试.",
+        "default": "出现意外异常,请稍后再试.如有必要,请联系开发者.",
+        "timeout": "连接超时,请稍后再试.",
+        "loc_not_found": "未查到该地区的天气信息.如果是我听错了,请联系开发者.",
+        "xinzhi_internal_error": "天气服务出现异常,请稍后再试.",
+        "too_frequent": "天气服务请求过于频繁,请稍后再试.",
     }
 
     request_for_time = {
@@ -36,20 +37,22 @@ class WeatherXinzhi(WeatherBase):
     }
 
     return_msg_zh_template = {
-        "current": "{}当前的天气是: {}, 气温是{}摄氏度.",
+        "current": "{}当前的天气是.{},气温是{}摄氏度.",
         "daily_detail": (
-            "{}的天气是: 白天{}, 晚上{}"
-            ", 最高{}摄氏度, 最低{}摄氏度, 相对湿度百分之{}."),
+            "{}的天气是.白天{},晚上{}"
+            ",最高{}摄氏度,最低{}摄氏度,相对湿度百分之{}."),
     }
+
+    err_table_path = Path(__file__).parents[2] / "XinzhiResources" / "errors.csv"
 
     def __init__(self,
             default_loc: str,
             api_key_path: PathLike,
-            error_table_path: PathLike) -> None:
+            ) -> None:
         super().__init__(default_loc=default_loc)
         with open(api_key_path) as f:
             self.api_key = f.read()
-        self.error_table = pd.read_csv(error_table_path)
+        self.error_table = pd.read_csv(self.err_table_path)
     
     def _handle_http_error(self, resp: Response) -> str:
         msg = self.err_msgs_zh["default"]

@@ -1,5 +1,5 @@
 
-from asr_base import ASRBase
+from .asr_base import ASRBase
 
 from nemo.collections.asr.models import EncDecCTCModel
 

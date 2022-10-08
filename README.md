@@ -31,10 +31,16 @@ Linux x86_64 or WSL2 (GNU Compilers(gcc, g++) are required for installing NeMo)
 
 ## Usage
 
+```sh
+python BotService/wsgi.py
+```
+
 ## Known Issues
 
 * pretrained stt_zh_citrinet_1024_gamma_0_25 weights may be the best STT model in NeMo,
   however, it still mistranscribe some chars in a sentence.
+* MTTS API cannot proccess sentence containing `:` and whitespace.
+* Try to speak a little slower.
 
 ## Abbreviations
 

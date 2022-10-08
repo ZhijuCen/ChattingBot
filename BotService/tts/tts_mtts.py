@@ -1,5 +1,5 @@
 
-from tts_base import TTSBase
+from .tts_base import TTSBase
 
 import mtts.models.fs2_model as fs2_model
 from mtts.synthesize import build_vocoder, normalize, to_int16, TextProcessor

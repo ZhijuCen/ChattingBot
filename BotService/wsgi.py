@@ -3,6 +3,7 @@ from flaskr import create_app
 from asr.stt_zh_citrinet import STTCitrinet
 from tts.tts_mtts import MTTSInferencer
 from weathers import WeatherXinzhi
+from datetime_ import DatetimeBase
 
 from gevent.pywsgi import WSGIServer
 
@@ -20,10 +21,13 @@ def main(args: Namespace):
     weather_provider = WeatherXinzhi(
         args.weather_default_location,
         args.weather_api_key_path,)
+    # init datetime provider
+    datetime_provider = DatetimeBase()
     app = create_app(
         asr_provider,
         tts_provider,
         weather_provider,
+        datetime_provider,
     )
     http_server = WSGIServer(("0.0.0.0", args.port), app)
     print(f"Ready to serve with port {args.port}.")

@@ -2,6 +2,7 @@
 from asr.stt_zh_citrinet import STTCitrinet
 from tts.tts_mtts import MTTSInferencer
 from weathers import WeatherXinzhi
+from datetime_ import DatetimeBase
 
 from flask import Flask, request, send_file, abort, jsonify
 import numpy as np
@@ -19,6 +20,7 @@ def create_app(
     asr_provider: STTCitrinet,
     tts_provider: MTTSInferencer,
     weather_provider: WeatherXinzhi,
+    datetime_provider: DatetimeBase,
 ):
     tmp_dir = Path(__file__).parents[2].absolute() / "tmp" / "server"
     tmp_dir.mkdir(parents=True, exist_ok=True)
@@ -56,11 +58,13 @@ def create_app(
         # Read Only Variables
         nonlocal asr_provider, tts_provider
         nonlocal weather_provider
+        nonlocal datetime_provider
         nonlocal tmp_dir, allowed_wavfile
 
         if request.method == "POST":
             wave_file = request.files["wave"]
             client_mac = request.form["client_mac"]
+            speaker_index = request.form["speaker_index"]
             # asr
             fname = sha384(wave_file.stream.read()).hexdigest()
             fpath = str(tmp_dir / f"{fname}.wav")
@@ -71,14 +75,20 @@ def create_app(
             # service
             answer_zh: str = "不好意思,我不明白这句话的意思."
             service_type = "not_served"
-            if weather_provider.is_for_weather(transcribed_zh):
+            if weather_provider.is_asked_for_weather(transcribed_zh):
                 answer_zh = weather_provider(transcribed_zh)
                 service_type = "weather"
+            elif datetime_provider.is_asked_for_time_now(transcribed_zh):
+                answer_zh = datetime_provider.get_time_now()
+                service_type = "datetime"
+            elif datetime_provider.is_asked_for_date_today(transcribed_zh):
+                answer_zh = datetime_provider.get_date_today()
+                service_type = "datetime"
             else:
                 pass
             # tts
             answer_zh_wave, ans_sample_rate = tts_provider \
-                .string_to_numpy_wave(answer_zh)
+                .string_to_numpy_wave(answer_zh, speaker_index)
             fname_ans = sha384(answer_zh_wave.tobytes()).hexdigest()
             fpath_ans = str(tmp_dir / f"{fname_ans}.wav")
             wavfile.write(fpath_ans, ans_sample_rate, answer_zh_wave)
@@ -91,6 +101,7 @@ def create_app(
             write_allowed_wavfile(allowed_wavfile)
             return jsonify({
                 "wave_url_path": wave_url_path,
+                "question_transcribed": transcribed_zh,
                 "answer_text": answer_zh,
                 "service_type": service_type,
             })

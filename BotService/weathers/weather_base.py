@@ -17,7 +17,7 @@ class WeatherBase:
 
     def parse_location_and_time(self, sentence_zh: str) -> Tuple[str, str]:
         """
-        @returns: Tuple[str, str], location and time.
+        returns: Tuple[str, str], location and time.
         """
         loc, t = self.default_loc, self.default_time
         cutted = pseg.cut(sentence_zh)
@@ -38,7 +38,11 @@ class WeatherBase:
             t = "这几天"
         else:
             t = words[i_t] if i_t != -1 else t
-        loc = loc.strip("省市")
+        loc = loc.replace("省", "")
+        loc = loc.replace("自治区", "")
+        loc = loc.replace("壮族", "")
+        loc = loc.replace("维吾尔族", "")
+        loc = loc.replace("市", "")
         return loc, t
     
     def hanzi_to_pinyin(self, hanzi: str) -> str:
@@ -64,7 +68,7 @@ class WeatherBase:
         dd_zh = self.num_to_hanzi(dd) + "日"
         return f"{yy_zh}{mm_zh}{dd_zh}"
     
-    def is_for_weather(self, sentence: str) -> bool:
+    def is_asked_for_weather(self, sentence: str) -> bool:
         return all((
             "天气" in sentence,
             "好" not in sentence,

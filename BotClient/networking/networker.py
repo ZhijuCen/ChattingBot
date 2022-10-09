@@ -7,16 +7,17 @@ from typing import Tuple, Dict, Any
 
 class NetWorker:
 
-    def __init__(self, remote_url: str) -> None:
+    def __init__(self, remote_url: str, speaker_index: str = "0") -> None:
         self.remote_url = remote_url.rstrip("/")
         self.mac = uuid.UUID(int=uuid.getnode()).hex[-12:]
+        self.speaker_index = speaker_index
     
     def send_speech(self, fpath: str) -> Tuple[bool, Dict[str, Any]]:
         flag: bool = False
         data: Dict[str, Any] = dict()
         try:
             files = {"wave": open(fpath, "rb")}
-            form = {"client_mac": self.mac}
+            form = {"client_mac": self.mac, "speaker_index": self.speaker_index}
             resp: Response = post(self.remote_url, data=form, files=files)
             if resp.status_code < 400:
                 data = resp.json()

@@ -29,6 +29,15 @@ Linux x86_64 or WSL2 (GNU Compilers(gcc, g++) are required for installing NeMo)
 * STT: NVIDIA **NeMo** -- [GitHub](https://github.com/NVIDIA/NeMo)
 * TTS: **Mandarin-TTS** with PyTorch backend -- [GitHub](https://github.com/ranchlai/mandarin-tts)
 
+## Setup
+
+```sh
+git clone --recurse-submodules $URL_OF_THIS_REPO
+
+# Create environment for machine having CUDA device.
+conda create -n $NAME_OF_NEW_ENV --file package-list-cuda.txt
+```
+
 ## Usage
 
 ```sh

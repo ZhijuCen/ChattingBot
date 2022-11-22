@@ -40,8 +40,16 @@ conda create -n $NAME_OF_NEW_ENV --file package-list-cuda.txt
 
 ## Usage
 
+### Compute Server
+
 ```sh
 python BotService/wsgi.py
+```
+
+### Client
+
+```sh
+python BotClient/client.py -u $url_of_compute_server
 ```
 
 ## Known Issues
